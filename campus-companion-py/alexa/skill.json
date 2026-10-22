@@ -1,0 +1,30 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "Campus Companion",
+          "summary": "Voice assistant for campus class schedules, dynamic assignment deadlines, and daily reminders.",
+          "description": "Campus Companion helps students keep track of their schedule, ask 'What is my next class?', dynamically calculate and store assignment due dates with daily reminders ('I have to submit DBMS assignment within 5 days'), and clear completed tasks.",
+          "examplePhrases": [
+            "Alexa, open campus companion",
+            "Alexa, ask campus companion what is my next class",
+            "Alexa, tell campus companion I have to submit DBMS assignment within 5 days"
+          ],
+          "keywords": ["campus", "schedule", "classes", "assignments", "reminders", "students", "university"]
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Test with 'What is my next class?', 'I have to submit DBMS assignment within 5 days', 'DBMS assignment is completed', and 'What are my reminders?'."
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "https://your-public-url.ngrok-free.app/api/alexa"
+        },
+        "interfaces": []
+      }
+    },
+    "manifestVersion": "1.0"
+  }
+}

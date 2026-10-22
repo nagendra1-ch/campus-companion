@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Companion — Alexa Voice & Campus Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E%3Ctext y=%2226%22 font-size=%2228%22>🎙️</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="brand-section">
+      <div class="brand-logo">🎙️</div>
+      <div>
+        <div class="brand-title">Campus Companion</div>
+        <div class="brand-subtitle">Alexa Skills Kit & Campus Assistant</div>
+      </div>
+    </div>
+
+    <!-- Active User Selector (Proves & Highlights Multi-User Data Isolation) -->
+    <div class="user-switch-wrapper">
+      <span class="user-avatar-badge" id="userAvatar">👨‍💻</span>
+      <span class="user-switch-label">Student:</span>
+      <select id="userSelect" class="user-select" onchange="onStudentChange()">
+        <option value="1">Ravi Kumar (DBMS & OS)</option>
+        <option value="2">Priya Sharma (AI & Cloud)</option>
+      </select>
+    </div>
+
+    <!-- Context Status & Time -->
+    <div class="header-status-group">
+      <span id="statePill" class="state-pill">INITIALIZING</span>
+      <div class="clock-display" style="display: inline-flex; align-items: center; gap: 6px;">
+        <span>🕒</span>
+        <span id="clockText">--:--:--</span>
+        <span id="clockLiveBadge" style="font-size: 0.68rem; font-weight: 700; padding: 1px 6px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">🟢 LIVE</span>
+      </div>
+      <button class="btn-fast-forward" onclick="advanceOneDay()" title="Fast forward 1 day to test daily reminders">
+        ⏩ +1 Day
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <div class="container">
+
+    <!-- User Data Isolation Card -->
+    <div class="user-identity-card">
+      <div class="identity-left">
+        <div class="identity-avatar" id="identityAvatar">👨‍💻</div>
+        <div>
+          <div class="identity-name" id="identityName">Ravi Kumar</div>
+          <div class="identity-meta">
+            <span id="identityEmail">ravi@campus.edu</span>
+            <span>•</span>
+            <span class="alexa-tag">Alexa User: <span id="identityAlexaId">amzn1.ask.account.RAVI_123</span></span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="user-isolated-tag">
+          🔒 Strict User-Isolated Database Records
+        </span>
+      </div>
+    </div>
+
+    <!-- Hero Section: Alexa Voice Console + Next Class -->
+    <div class="hero-split">
+
+      <!-- 1. Alexa Voice Interaction Console -->
+      <div class="glass-card alexa-console">
+        <div class="card-header">
+          <div class="card-title">
+            <span>🔵</span> Alexa Voice Assistant
+          </div>
+          <button class="btn-icon-text" onclick="openJsonModal()">
+            <span>🔍</span> View ASK Payload
+          </button>
+        </div>
+
+        <div class="alexa-orb-wrapper">
+          <div class="alexa-orb" id="alexaOrb">🎙️</div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="alexa-connected-title">Alexa Skills Kit Connected</span>
+              <span id="geminiBadge" class="ai-mentor-badge" title="Local Academic AI Active (Zero API Keys Needed)">
+                ⚡ Local Academic AI (No API Key)
+              </span>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+              Webhook: <code class="webhook-code">POST /api/alexa</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- Natural Voice Input -->
+        <div class="voice-input-group">
+          <input 
+            type="text" 
+            id="voiceInput" 
+            class="voice-input" 
+            placeholder="Type or speak e.g. 'What is my next class?' or 'Submit DBMS in 5 days'..."
+            onkeydown="if(event.key==='Enter') sendVoiceQuery()"
+          >
+          <button class="btn-mic" id="btnMic" onclick="toggleMic()" title="Hold/Click to speak">
+            🎤
+          </button>
+          <button class="btn-send" onclick="sendVoiceQuery()">
+            Ask
+          </button>
+        </div>
+
+        <!-- Sample One-Click Voice Utterances -->
+        <div class="preset-chips-label">Try Voice Utterances:</div>
+        <div class="preset-chips">
+          <button class="chip" onclick="askPreset('what is my next class')">
+            💬 "What is my next class?"
+          </button>
+          <button class="chip" onclick="askPreset('did i have any pending assessments')">
+            📋 "Did I have any pending assessments?"
+          </button>
+          <button class="chip" onclick="askPreset('i have a new class of Cloud Computing with room no C-102 and time 2 PM')">
+            🏫 "New class Cloud Computing room C-102 at 2 PM"
+          </button>
+          <button class="chip" onclick="askPreset('i have to submit DBMS assignment within 5 days')">
+            📝 "Submit DBMS assignment in 5 days"
+          </button>
+          <button class="chip" onclick="askPreset('DBMS assignment is completed')">
+            ✅ "DBMS assignment is completed"
+          </button>
+          <button class="chip" onclick="askPreset('tomorrow I have a new class of Software Engineering at room B at 10 o\'clock')">
+            🏫 "Tomorrow Software Eng in Room B at 10 AM"
+          </button>
+          <button class="chip" onclick="askPreset('what are the upcoming classes scheduled for me')">
+            📅 "What are the upcoming classes scheduled for me?"
+          </button>
+          <button class="chip" onclick="askPreset('what classes do I have tomorrow')">
+            🗓️ "What classes do I have tomorrow?"
+          </button>
+          <button class="chip" onclick="loadGeminiStudyPlan()">
+            ✨ "Give me a daily study plan"
+          </button>
+        </div>
+
+        <!-- Alexa Response Box -->
+        <div class="alexa-response-box">
+          <div class="response-badge">
+            <span>✨</span> Alexa Spoken Output
+          </div>
+          <div id="alexaSpeech" class="response-speech-text">
+            "Hello! Ask me 'What is my next class?' or tell me 'I have to submit DBMS assignment within 5 days'..."
+          </div>
+          <div class="response-actions">
+            <button class="btn-icon-text" onclick="speakCurrentSpeech()">
+              <span>🔊</span> Listen Aloud
+            </button>
+            <button class="btn-icon-text" onclick="openJsonModal()">
+              <span>📋</span> Inspect JSON
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Next Class Live Hero Card -->
+      <div class="glass-card next-class-card">
+        <div>
+          <div class="card-header">
+            <div class="card-title">
+              <span>📅</span> Next Upcoming Class
+            </div>
+            <span id="nextClassBadge" class="countdown-badge">--</span>
+          </div>
+
+          <div class="next-class-main">
+            <div class="next-class-title" id="nextClassTitle">Loading schedule...</div>
+            <div class="next-class-details" id="nextClassDetails">
+              <div class="detail-item"><span>📍 Room:</span> <b id="nextClassRoom">--</b></div>
+              <div class="detail-item"><span>⏰ Starts at:</span> <b id="nextClassStart">--</b></div>
+              <div class="detail-item"><span id="nextClassTypeBadge" class="badge-theory">THEORY</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div class="current-status-banner" id="currentSessionBanner">
+            Currently: <b>No ongoing class</b>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Lower Section: Timetable & Assignments/Reminders -->
+    <div class="lower-grid">
+
+      <!-- Today's Schedule -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>🗓️</span> Today's Class Schedule
+          </div>
+          <span style="font-size: 0.78rem; color: var(--text-dim);" id="scheduleDayTitle">Monday</span>
+        </div>
+        <div class="timeline-list" id="timelineList">
+          <!-- Timetable rows injected via JS -->
+        </div>
+      </div>
+
+      <!-- Assignments & Daily Reminders Center -->
+      <div class="glass-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>📚</span> Assignments & Daily Reminders
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn-ai-advisor" onclick="loadGeminiStudyPlan()">
+              ✨ AI Advisor
+            </button>
+            <span class="due-pill upcoming" id="pendingTasksBadge">0 Pending</span>
+          </div>
+        </div>
+
+        <!-- Quick Add Form -->
+        <div class="quick-add-form">
+          <input type="text" id="quickSubject" class="input-quick" placeholder="Subject (e.g. DBMS, OS, AI)...">
+          <input type="number" id="quickDays" class="input-quick" placeholder="Days (e.g. 5)" min="1" max="30" value="5">
+          <button class="btn-add-primary" onclick="quickAddAssignment()">+ Add & Remind</button>
+        </div>
+
+        <!-- Active Assignments List -->
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">
+          Active Deadlines (Calculated Target Dates):
+        </div>
+        <div class="assignment-card-list" id="assignmentList">
+          <!-- Injected via JS -->
+        </div>
+
+        <!-- Daily Reminders Trigger Feed -->
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--amber); margin-top: 18px; margin-bottom: 4px;">
+          🔔 Active Daily Reminders for Today:
+        </div>
+        <div class="reminders-list" id="remindersList">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Simulator & Location Controls -->
+    <div class="sim-controls-panel">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-weight: 700; font-size: 0.9rem;">🕹️ Simulator Controls:</span>
+        <div class="sim-btn-group">
+          <button class="sim-btn" onclick="simEvent('LEAVE_HOME')">Leave Home</button>
+          <button class="sim-btn" onclick="simEvent('START_TRAVEL')">Traveling</button>
+          <button class="sim-btn" onclick="simEvent('ARRIVE_COLLEGE')">Arrive at College</button>
+          <button class="sim-btn" onclick="simEvent('LEAVE_COLLEGE')">Leave College</button>
+          <button class="sim-btn" onclick="simEvent('ARRIVE_HOME')">Arrive Home</button>
+        </div>
+      </div>
+
+      <div class="sim-time-form">
+        <button class="sim-btn" onclick="syncLiveClock()" style="color: #34d399; font-weight: 600;" title="Restore live system date & time">⚡ Live Time</button>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Sim Time:</span>
+        <input type="datetime-local" id="simTimeInput" class="input-dt" value="">
+        <button class="sim-btn" onclick="setSimClock()">Set Time</button>
+        <button class="sim-btn" onclick="advanceOneDay()" style="color: #fcd34d;">+1 Day</button>
+        <button class="sim-btn" onclick="resetDb()" style="color: #f87171;" title="Reset database to initial seed data">↺ Reset DB</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Alexa ASK JSON Inspector Modal -->
+  <div class="modal-backdrop" id="jsonModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="font-weight: 700; color: #fff; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+          <span>📋</span> Alexa Skills Kit (ASK) Payload Inspector
+        </div>
+        <button class="btn-close" onclick="closeJsonModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px;">
+          Latest Alexa JSON Response generated by <code style="color: var(--alexa-cyan);">/api/alexa</code>:
+        </div>
+        <pre class="json-pre" id="jsonContent">Loading JSON payload...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

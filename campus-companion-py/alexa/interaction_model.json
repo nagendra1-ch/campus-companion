@@ -1,0 +1,291 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "campus companion",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": ["cancel", "never mind", "exit"]
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": ["help", "what can i do", "what can you do", "instructions"]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": ["stop", "bye", "goodbye"]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "NextClassIntent",
+          "slots": [],
+          "samples": [
+            "what is my next class",
+            "what's my next class",
+            "what is my upcoming class",
+            "when is my next class",
+            "where is my next class",
+            "what class do I have next",
+            "which lecture is next",
+            "where do I have to go next",
+            "tell me my next class",
+            "next class",
+            "my class schedule",
+            "what lecture do i have now",
+            "today's classes"
+          ]
+        },
+        {
+          "name": "UpcomingClassesIntent",
+          "slots": [
+            {
+              "name": "Day",
+              "type": "AMAZON.DayOfWeek",
+              "samples": [
+                "for {Day}",
+                "on {Day}",
+                "{Day}"
+              ]
+            }
+          ],
+          "samples": [
+            "what are the upcoming classes scheduled for me",
+            "what are my upcoming classes",
+            "what are the upcoming classes",
+            "what classes are scheduled for me",
+            "what classes do i have today",
+            "what classes do i have tomorrow",
+            "what classes do i have on {Day}",
+            "upcoming classes",
+            "classes scheduled for me",
+            "what is my schedule today",
+            "what is my schedule tomorrow",
+            "tell me all my classes today"
+          ]
+        },
+        {
+          "name": "AddClassIntent",
+          "slots": [
+            {
+              "name": "Subject",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "of {Subject}",
+                "for {Subject}",
+                "{Subject} class",
+                "{Subject}"
+              ]
+            },
+            {
+              "name": "Room",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "with room no {Room}",
+                "with room {Room}",
+                "in room {Room}",
+                "room no {Room}",
+                "room {Room}",
+                "{Room}"
+              ]
+            },
+            {
+              "name": "Time",
+              "type": "AMAZON.TIME",
+              "samples": [
+                "and time {Time}",
+                "at time {Time}",
+                "at {Time}",
+                "time {Time}",
+                "{Time}"
+              ]
+            },
+            {
+              "name": "Day",
+              "type": "AMAZON.DayOfWeek",
+              "samples": [
+                "on {Day}",
+                "{Day}"
+              ]
+            }
+          ],
+          "samples": [
+            "i have a new class of {Subject} with room no {Room} and time {Time}",
+            "i have a new class of {Subject} with room {Room} and time {Time}",
+            "i have a new class of {Subject} in room {Room} at {Time}",
+            "i have a new class of {Subject} in room {Room} on {Day} at {Time}",
+            "i have a new class of {Subject} on {Day} in room {Room} at {Time}",
+            "add a new class of {Subject} with room no {Room} and time {Time}",
+            "add a new class of {Subject} with room {Room} at {Time}",
+            "add a new class of {Subject} in room {Room} at {Time}",
+            "add a new class for {Subject} in room {Room} at {Time}",
+            "add class {Subject} in room {Room} at {Time}",
+            "new class of {Subject} room {Room} time {Time}",
+            "new class {Subject} in room {Room} at {Time}",
+            "new class {Subject} in room {Room} on {Day} at {Time}",
+            "schedule new class for {Subject} in room {Room} at {Time}",
+            "schedule class {Subject} at {Time} in room {Room}",
+            "i have a class of {Subject} in room {Room} at {Time}",
+            "i have class of {Subject} with room no {Room} and time {Time}",
+            "add new lecture for {Subject} in room {Room} at {Time}"
+          ]
+        },
+        {
+          "name": "AddAssignmentIntent",
+          "slots": [
+            {
+              "name": "Subject",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "for {Subject}",
+                "{Subject} assignment",
+                "{Subject} assessment",
+                "{Subject}"
+              ]
+            },
+            {
+              "name": "Days",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "within {Days} days",
+                "in {Days} days",
+                "{Days} days",
+                "{Days}"
+              ]
+            }
+          ],
+          "samples": [
+            "i have to submit {Subject} assignment within {Days} days",
+            "i have to submit {Subject} assignment in {Days} days",
+            "i have a {Subject} assignment due in {Days} days",
+            "submit {Subject} assignment within {Days} days",
+            "submit {Subject} assignment in {Days} days",
+            "add {Subject} assignment due in {Days} days",
+            "remind me to submit {Subject} assignment in {Days} days",
+            "set a deadline for {Subject} in {Days} days",
+            "i have {Subject} homework due in {Days} days",
+            "add assignment for {Subject} within {Days} days",
+            "i have to submit {Subject} assessment within {Days} days",
+            "i have to submit {Subject} assessment in {Days} days",
+            "submit {Subject} assessment within {Days} days",
+            "submit {Subject} assessment in {Days} days",
+            "add {Subject} assessment due in {Days} days",
+            "i have a {Subject} assessment due in {Days} days",
+            "add assessment for {Subject} within {Days} days",
+            "set a reminder for {Subject} in {Days} days"
+          ]
+        },
+        {
+          "name": "CompleteAssignmentIntent",
+          "slots": [
+            {
+              "name": "Subject",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "{Subject} assignment",
+                "{Subject} assessment",
+                "{Subject}"
+              ]
+            }
+          ],
+          "samples": [
+            "it is completed",
+            "it is done",
+            "{Subject} assignment is completed",
+            "{Subject} is completed",
+            "{Subject} assessment is completed",
+            "{Subject} assessment is done",
+            "i have completed {Subject} assignment",
+            "i have completed {Subject} assessment",
+            "i finished {Subject} assignment",
+            "i finished {Subject} assessment",
+            "i submitted {Subject} assignment",
+            "i submitted {Subject} assessment",
+            "mark {Subject} assignment as completed",
+            "mark {Subject} assessment as completed",
+            "mark {Subject} as done",
+            "complete {Subject} assignment",
+            "complete {Subject} assessment",
+            "finished {Subject}"
+          ]
+        },
+        {
+          "name": "DeleteAssignmentIntent",
+          "slots": [
+            {
+              "name": "Subject",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "delete {Subject} assignment",
+            "remove {Subject} assignment",
+            "clear {Subject} assignment",
+            "delete {Subject} assessment",
+            "remove {Subject} assessment",
+            "delete my assignment"
+          ]
+        },
+        {
+          "name": "CheckRemindersIntent",
+          "slots": [],
+          "samples": [
+            "what are my reminders",
+            "check my reminders",
+            "what assignments do I have",
+            "what do I have to submit",
+            "show my deadlines",
+            "list my tasks",
+            "do I have any assignments due",
+            "my pending homework",
+            "did i have any pending assessments",
+            "did i have any pending assignments",
+            "do i have any pending assessments",
+            "do i have any pending assignments",
+            "any pending assessments",
+            "any pending assignments",
+            "pending assessments",
+            "pending assignments",
+            "what are my pending assessments",
+            "what are my pending assignments",
+            "what assessments do i have",
+            "what assessments are pending",
+            "check my assessments",
+            "check pending assessments",
+            "list my assessments",
+            "show my assessments",
+            "show pending assessments",
+            "are there any pending assessments",
+            "are there any pending assignments",
+            "tell me my pending assessments",
+            "tell me my pending assignments",
+            "do i have any assessments due",
+            "what assessments are due",
+            "do i have any pending tasks",
+            "what is due soon",
+            "what do i have due",
+            "my assessments",
+            "my assignments"
+          ]
+        },
+        {
+          "name": "GetTasksIntent",
+          "slots": [],
+          "samples": [
+            "get tasks",
+            "get my tasks",
+            "list tasks",
+            "pending tasks"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}

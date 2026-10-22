@@ -1,0 +1,17 @@
+{
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "{campus-companion-py/**,campus.db,schema.sql}"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
+    }
+  ]
+}

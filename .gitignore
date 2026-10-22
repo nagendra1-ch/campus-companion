@@ -1,0 +1,43 @@
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+# Python cache & virtualenvs
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Large Executables & Tunnel Binaries
+*.exe
+cloudflared
+cloudflared.exe
+campus-companion-py/cloudflared.exe
+
+# IDE, OS, & Logs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
