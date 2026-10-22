@@ -302,12 +302,82 @@ def run_tests():
     r3 = alexa_handler.parse_natural_language_to_alexa(ravi_id, "when was the class")["response"]["outputSpeech"]["text"]
     print(f"When was class Output: \"{r3}\"")
     assert "DBMS" in r3 and "B-204" in r3 and "9:00 AM" in r3, "Must state class name, room no, and time for past class"
-    print("[OK] Room number and class time queries accurately return class name, room no, and time!")
+    # -------------------------------------------------------------
+    # Test 11: Real Alexa Cloud Intent Requests
+    # -------------------------------------------------------------
+    print("\n--- Test 11: Real Alexa Cloud Intent Requests ---")
+    
+    # 1. GreetingIntent
+    alexa_hi_req = {
+        "version": "1.0",
+        "session": {"user": {"userId": "amzn1.ask.account.RAVI_123"}},
+        "request": {
+            "type": "IntentRequest",
+            "intent": {"name": "GreetingIntent", "slots": {}}
+        }
+    }
+    hi_speech = alexa_handler.handle_alexa_request(alexa_hi_req)["response"]["outputSpeech"]["text"]
+    print(f"Alexa Greeting Output: \"{hi_speech}\"")
+    assert hi_speech == "Hi Ravi", "GreetingIntent must respond with 'Hi Ravi'"
 
-    print("\n>>> ALL 10 TEST SUITES PASSED PERFECTLY! <<<\n")
+    # 2. TodayScheduleIntent
+    alexa_today_req = {
+        "version": "1.0",
+        "session": {"user": {"userId": "amzn1.ask.account.RAVI_123"}},
+        "request": {
+            "type": "IntentRequest",
+            "intent": {"name": "TodayScheduleIntent", "slots": {}}
+        }
+    }
+    today_speech = alexa_handler.handle_alexa_request(alexa_today_req)["response"]["outputSpeech"]["text"]
+    print(f"Alexa TodayScheduleIntent Output: \"{today_speech}\"")
+    assert "class" in today_speech.lower() or "today" in today_speech.lower()
+
+    # 3. ClassDetailsIntent (Ask room of DBMS at morning)
+    clock.set_now(ravi_id, datetime.fromisoformat("2026-10-12T07:45:00"))
+    alexa_details_req = {
+        "version": "1.0",
+        "session": {"user": {"userId": "amzn1.ask.account.RAVI_123"}},
+        "request": {
+            "type": "IntentRequest",
+            "intent": {
+                "name": "ClassDetailsIntent",
+                "slots": {
+                    "Subject": {"name": "Subject", "value": "DBMS"}
+                }
+            }
+        }
+    }
+    details_speech = alexa_handler.handle_alexa_request(alexa_details_req)["response"]["outputSpeech"]["text"]
+    print(f"Alexa ClassDetailsIntent Output: \"{details_speech}\"")
+    assert "DBMS" in details_speech and "B-204" in details_speech and "9:00 AM" in details_speech
+
+    # 4. AddClassIntent with bundled text in Subject slot (defensive fallback test)
+    alexa_bundled_add_req = {
+        "version": "1.0",
+        "session": {"user": {"userId": "amzn1.ask.account.RAVI_123"}},
+        "request": {
+            "type": "IntentRequest",
+            "intent": {
+                "name": "AddClassIntent",
+                "slots": {
+                    "Subject": {"name": "Subject", "value": "Cloud Computing room C-102 at 2 pm"},
+                    "Room": {"name": "Room", "value": ""},
+                    "Time": {"name": "Time", "value": ""}
+                }
+            }
+        }
+    }
+    bundled_speech = alexa_handler.handle_alexa_request(alexa_bundled_add_req)["response"]["outputSpeech"]["text"]
+    print(f"Alexa Bundled AddClassIntent Output: \"{bundled_speech}\"")
+    assert "Cloud Computing" in bundled_speech and "C-102" in bundled_speech and "2:00 PM" in bundled_speech
+    print("[OK] Real Alexa Cloud intents (Greeting, TodaySchedule, ClassDetails, AddClass) verified successfully!")
+
+    print("\n>>> ALL 11 TEST SUITES PASSED PERFECTLY! <<<\n")
 
 
 
 
 if __name__ == "__main__":
     run_tests()
+

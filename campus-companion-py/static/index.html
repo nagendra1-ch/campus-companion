@@ -1,12 +1,15 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campus Companion — Alexa Voice & Campus Hub</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E%3Ctext y=%2226%22 font-size=%2228%22>🎙️</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E%3Ctext y=%2226%22 font-size=%2228%22>🎙️</text></svg>">
 </head>
+
 <body>
 
   <!-- Top Navigation Bar -->
@@ -35,7 +38,9 @@
       <div class="clock-display" style="display: inline-flex; align-items: center; gap: 6px;">
         <span>🕒</span>
         <span id="clockText">--:--:--</span>
-        <span id="clockLiveBadge" style="font-size: 0.68rem; font-weight: 700; padding: 1px 6px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">🟢 LIVE</span>
+        <span id="clockLiveBadge"
+          style="font-size: 0.68rem; font-weight: 700; padding: 1px 6px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">🟢
+          LIVE</span>
       </div>
       <button class="btn-fast-forward" onclick="advanceOneDay()" title="Fast forward 1 day to test daily reminders">
         ⏩ +1 Day
@@ -85,9 +90,7 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="alexa-connected-title">Alexa Skills Kit Connected</span>
-              <span id="geminiBadge" class="ai-mentor-badge" title="Local Academic AI Active (Zero API Keys Needed)">
-                ⚡ Local Academic AI (No API Key)
-              </span>
+
             </div>
             <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
               Webhook: <code class="webhook-code">POST /api/alexa</code>
@@ -97,13 +100,9 @@
 
         <!-- Natural Voice Input -->
         <div class="voice-input-group">
-          <input 
-            type="text" 
-            id="voiceInput" 
-            class="voice-input" 
+          <input type="text" id="voiceInput" class="voice-input"
             placeholder="Type or speak e.g. 'What is my next class?' or 'Submit DBMS in 5 days'..."
-            onkeydown="if(event.key==='Enter') sendVoiceQuery()"
-          >
+            onkeydown="if(event.key==='Enter') sendVoiceQuery()">
           <button class="btn-mic" id="btnMic" onclick="toggleMic()" title="Hold/Click to speak">
             🎤
           </button>
@@ -121,7 +120,8 @@
           <button class="chip" onclick="askPreset('did i have any pending assessments')">
             📋 "Did I have any pending assessments?"
           </button>
-          <button class="chip" onclick="askPreset('i have a new class of Cloud Computing with room no C-102 and time 2 PM')">
+          <button class="chip"
+            onclick="askPreset('i have a new class of Cloud Computing with room no C-102 and time 2 PM')">
             🏫 "New class Cloud Computing room C-102 at 2 PM"
           </button>
           <button class="chip" onclick="askPreset('i have to submit DBMS assignment within 5 days')">
@@ -130,7 +130,8 @@
           <button class="chip" onclick="askPreset('DBMS assignment is completed')">
             ✅ "DBMS assignment is completed"
           </button>
-          <button class="chip" onclick="askPreset('tomorrow I have a new class of Software Engineering at room B at 10 o\'clock')">
+          <button class="chip"
+            onclick="askPreset('tomorrow I have a new class of Software Engineering at room B at 10 o\'clock')">
             🏫 "Tomorrow Software Eng in Room B at 10 AM"
           </button>
           <button class="chip" onclick="askPreset('what are the upcoming classes scheduled for me')">
@@ -225,7 +226,8 @@
         <!-- Quick Add Form -->
         <div class="quick-add-form">
           <input type="text" id="quickSubject" class="input-quick" placeholder="Subject (e.g. DBMS, OS, AI)...">
-          <input type="number" id="quickDays" class="input-quick" placeholder="Days (e.g. 5)" min="1" max="30" value="5">
+          <input type="number" id="quickDays" class="input-quick" placeholder="Days (e.g. 5)" min="1" max="30"
+            value="5">
           <button class="btn-add-primary" onclick="quickAddAssignment()">+ Add & Remind</button>
         </div>
 
@@ -262,12 +264,14 @@
       </div>
 
       <div class="sim-time-form">
-        <button class="sim-btn" onclick="syncLiveClock()" style="color: #34d399; font-weight: 600;" title="Restore live system date & time">⚡ Live Time</button>
+        <button class="sim-btn" onclick="syncLiveClock()" style="color: #34d399; font-weight: 600;"
+          title="Restore live system date & time">⚡ Live Time</button>
         <span style="font-size: 0.8rem; color: var(--text-muted);">Sim Time:</span>
         <input type="datetime-local" id="simTimeInput" class="input-dt" value="">
         <button class="sim-btn" onclick="setSimClock()">Set Time</button>
         <button class="sim-btn" onclick="advanceOneDay()" style="color: #fcd34d;">+1 Day</button>
-        <button class="sim-btn" onclick="resetDb()" style="color: #f87171;" title="Reset database to initial seed data">↺ Reset DB</button>
+        <button class="sim-btn" onclick="resetDb()" style="color: #f87171;"
+          title="Reset database to initial seed data">↺ Reset DB</button>
       </div>
     </div>
 
@@ -293,4 +297,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>

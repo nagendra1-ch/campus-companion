@@ -24,6 +24,23 @@
           "samples": []
         },
         {
+          "name": "GreetingIntent",
+          "slots": [],
+          "samples": [
+            "hii",
+            "hi",
+            "hello",
+            "hey",
+            "hi there",
+            "hello there",
+            "hey there",
+            "good morning",
+            "good afternoon",
+            "good evening",
+            "greetings"
+          ]
+        },
+        {
           "name": "NextClassIntent",
           "slots": [],
           "samples": [
@@ -38,8 +55,24 @@
             "tell me my next class",
             "next class",
             "my class schedule",
-            "what lecture do i have now",
-            "today's classes"
+            "what lecture do i have now"
+          ]
+        },
+        {
+          "name": "TodayScheduleIntent",
+          "slots": [],
+          "samples": [
+            "today schedule",
+            "today's schedule",
+            "my schedule today",
+            "what is my schedule today",
+            "what classes do i have today",
+            "classes today",
+            "today's classes",
+            "todays classes",
+            "schedule today",
+            "schedule for today",
+            "tell me all my classes today"
           ]
         },
         {
@@ -60,14 +93,67 @@
             "what are my upcoming classes",
             "what are the upcoming classes",
             "what classes are scheduled for me",
-            "what classes do i have today",
             "what classes do i have tomorrow",
             "what classes do i have on {Day}",
             "upcoming classes",
             "classes scheduled for me",
-            "what is my schedule today",
             "what is my schedule tomorrow",
-            "tell me all my classes today"
+            "schedule for tomorrow",
+            "classes for {Day}"
+          ]
+        },
+        {
+          "name": "ClassDetailsIntent",
+          "slots": [
+            {
+              "name": "Subject",
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "of {Subject}",
+                "for {Subject}",
+                "{Subject} class",
+                "{Subject}"
+              ]
+            }
+          ],
+          "samples": [
+            "what is the room number of {Subject}",
+            "what's the room number of {Subject}",
+            "what is the room number for {Subject}",
+            "what is the room no of {Subject}",
+            "room number of {Subject}",
+            "room no of {Subject}",
+            "room number for {Subject}",
+            "which room is {Subject}",
+            "which room is {Subject} in",
+            "what room is {Subject} in",
+            "where is {Subject} class",
+            "where is my {Subject} class",
+            "where is {Subject}",
+            "where was {Subject} class",
+            "where was {Subject}",
+            "when is {Subject} class",
+            "when is {Subject}",
+            "when was {Subject} class",
+            "when was the {Subject} class",
+            "when was {Subject}",
+            "what time is {Subject} class",
+            "what time is {Subject}",
+            "what time was {Subject} class",
+            "what time was {Subject}",
+            "time of {Subject} class",
+            "time for {Subject}",
+            "room of {Subject}",
+            "what is the room number",
+            "what is the room no",
+            "room number",
+            "room no",
+            "which room",
+            "when is the class",
+            "when was the class",
+            "what time is the class",
+            "what time was the class",
+            "time of the class"
           ]
         },
         {
@@ -85,13 +171,13 @@
             },
             {
               "name": "Room",
-              "type": "AMAZON.SearchQuery",
+              "type": "ROOM_TYPE",
               "samples": [
+                "room {Room}",
+                "room no {Room}",
                 "with room no {Room}",
                 "with room {Room}",
                 "in room {Room}",
-                "room no {Room}",
-                "room {Room}",
                 "{Room}"
               ]
             },
@@ -116,24 +202,54 @@
             }
           ],
           "samples": [
-            "i have a new class of {Subject} with room no {Room} and time {Time}",
-            "i have a new class of {Subject} with room {Room} and time {Time}",
-            "i have a new class of {Subject} in room {Room} at {Time}",
-            "i have a new class of {Subject} in room {Room} on {Day} at {Time}",
-            "i have a new class of {Subject} on {Day} in room {Room} at {Time}",
+            "new class {Subject} room {Room} at {Time}",
+            "new class {Subject} room {Room} time {Time}",
+            "new class {Subject} in room {Room} at {Time}",
+            "new class {Subject} in room {Room} time {Time}",
+            "new class {Subject} room {Room}",
+            "new class {Subject} in room {Room}",
+            "new class {Subject} at {Time}",
+            "new class {Subject} at {Time} in room {Room}",
+            "new class {Subject} at {Time} room {Room}",
+            "new class of {Subject} room {Room} at {Time}",
+            "new class of {Subject} in room {Room} at {Time}",
+            "new class of {Subject} room {Room} time {Time}",
+            "add class {Subject} room {Room} at {Time}",
+            "add class {Subject} in room {Room} at {Time}",
+            "add class {Subject} at {Time} in room {Room}",
+            "add class {Subject} at {Time} room {Room}",
+            "add class {Subject} room {Room}",
+            "add class {Subject} at {Time}",
+            "add new class {Subject} room {Room} at {Time}",
+            "add new class {Subject} in room {Room} at {Time}",
+            "add a new class {Subject} room {Room} at {Time}",
+            "add a new class {Subject} in room {Room} at {Time}",
+            "add a class {Subject} room {Room} at {Time}",
+            "add a class {Subject} in room {Room} at {Time}",
+            "add a new class of {Subject} in room {Room} at {Time}",
             "add a new class of {Subject} with room no {Room} and time {Time}",
             "add a new class of {Subject} with room {Room} at {Time}",
-            "add a new class of {Subject} in room {Room} at {Time}",
             "add a new class for {Subject} in room {Room} at {Time}",
-            "add class {Subject} in room {Room} at {Time}",
-            "new class of {Subject} room {Room} time {Time}",
-            "new class {Subject} in room {Room} at {Time}",
-            "new class {Subject} in room {Room} on {Day} at {Time}",
-            "schedule new class for {Subject} in room {Room} at {Time}",
+            "schedule class {Subject} room {Room} at {Time}",
+            "schedule class {Subject} in room {Room} at {Time}",
             "schedule class {Subject} at {Time} in room {Room}",
+            "schedule new class {Subject} room {Room} at {Time}",
+            "schedule new class for {Subject} in room {Room} at {Time}",
+            "i have a new class {Subject} room {Room} at {Time}",
+            "i have a new class of {Subject} in room {Room} at {Time}",
+            "i have a new class of {Subject} with room no {Room} and time {Time}",
+            "i have a new class of {Subject} with room {Room} and time {Time}",
             "i have a class of {Subject} in room {Room} at {Time}",
             "i have class of {Subject} with room no {Room} and time {Time}",
-            "add new lecture for {Subject} in room {Room} at {Time}"
+            "i have a class {Subject} room {Room} at {Time}",
+            "i have class {Subject} room {Room} at {Time}",
+            "class {Subject} room {Room} at {Time}",
+            "new class {Subject} room {Room} on {Day} at {Time}",
+            "new class {Subject} on {Day} room {Room} at {Time}",
+            "new class {Subject} on {Day} in room {Room} at {Time}",
+            "new class {Subject} in room {Room} on {Day} at {Time}",
+            "add class {Subject} on {Day} in room {Room} at {Time}",
+            "add class {Subject} on {Day} room {Room} at {Time}"
           ]
         },
         {
@@ -166,6 +282,8 @@
             "i have a {Subject} assignment due in {Days} days",
             "submit {Subject} assignment within {Days} days",
             "submit {Subject} assignment in {Days} days",
+            "submit {Subject} in {Days} days",
+            "submit {Subject} within {Days} days",
             "add {Subject} assignment due in {Days} days",
             "remind me to submit {Subject} assignment in {Days} days",
             "set a deadline for {Subject} in {Days} days",
@@ -220,12 +338,19 @@
           "slots": [
             {
               "name": "Subject",
-              "type": "AMAZON.SearchQuery"
+              "type": "AMAZON.SearchQuery",
+              "samples": [
+                "{Subject} assignment",
+                "{Subject} assessment",
+                "{Subject}"
+              ]
             }
           ],
           "samples": [
             "delete {Subject} assignment",
+            "delete {Subject}",
             "remove {Subject} assignment",
+            "remove {Subject}",
             "clear {Subject} assignment",
             "delete {Subject} assessment",
             "remove {Subject} assessment",
@@ -283,9 +408,124 @@
             "list tasks",
             "pending tasks"
           ]
+        },
+        {
+          "name": "CampusCommandIntent",
+          "slots": [
+            {
+              "name": "Command",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "campus {Command}",
+            "tell me {Command}",
+            "ask campus {Command}",
+            "i want to {Command}",
+            "please {Command}",
+            "can you {Command}",
+            "companion {Command}",
+            "alexa {Command}"
+          ]
         }
       ],
-      "types": []
+      "types": [
+        {
+          "name": "ROOM_TYPE",
+          "values": [
+            {
+              "name": {
+                "value": "C-102",
+                "synonyms": ["c 102", "c-102", "room c 102", "room c-102", "c one zero two", "room c one zero two"]
+              }
+            },
+            {
+              "name": {
+                "value": "B-204",
+                "synonyms": ["b 204", "b-204", "room b 204", "room b-204", "b two zero four", "room b two zero four"]
+              }
+            },
+            {
+              "name": {
+                "value": "A-101",
+                "synonyms": ["a 101", "a-101", "room a 101", "room a-101", "a one zero one"]
+              }
+            },
+            {
+              "name": {
+                "value": "C-101",
+                "synonyms": ["c 101", "c-101", "room c 101", "room c-101"]
+              }
+            },
+            {
+              "name": {
+                "value": "B-201",
+                "synonyms": ["b 201", "b-201", "room b 201", "room b-201"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room 101",
+                "synonyms": ["101", "room one zero one", "one zero one"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room 102",
+                "synonyms": ["102", "room one zero two", "one zero two"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room 201",
+                "synonyms": ["201", "room two zero one", "two zero one"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room 202",
+                "synonyms": ["202", "room two zero two", "two zero two"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room 301",
+                "synonyms": ["301", "room three zero one", "three zero one"]
+              }
+            },
+            {
+              "name": {
+                "value": "Lab 1",
+                "synonyms": ["computer lab 1", "lab one", "lab 1"]
+              }
+            },
+            {
+              "name": {
+                "value": "Lab 2",
+                "synonyms": ["computer lab 2", "lab two", "lab 2"]
+              }
+            },
+            {
+              "name": {
+                "value": "Lab 3",
+                "synonyms": ["computer lab 3", "lab three", "lab 3"]
+              }
+            },
+            {
+              "name": {
+                "value": "Auditorium",
+                "synonyms": ["audi", "main auditorium", "college auditorium"]
+              }
+            },
+            {
+              "name": {
+                "value": "Seminar Hall",
+                "synonyms": ["conference hall", "seminar room"]
+              }
+            }
+          ]
+        }
+      ]
     }
   }
 }

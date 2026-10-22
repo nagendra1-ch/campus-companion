@@ -142,12 +142,17 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
             )
 
         # Upcoming Classes / Timetable Schedule Query (Plural / List)
-        elif intent_name in ("UpcomingClassesIntent", "ClassScheduleIntent", "GetScheduleIntent", "TodayClassesIntent"):
+        elif intent_name in (
+            "UpcomingClassesIntent", "ClassScheduleIntent", "GetScheduleIntent",
+            "TodayClassesIntent", "TodayScheduleIntent", "DayScheduleIntent", "ScheduleTodayIntent"
+        ):
             day_slot = (
                 extract_slot_value(intent, "Day") or
                 extract_slot_value(intent, "DayOfWeek") or
                 None
             )
+            if not day_slot and ("today" in intent_name.lower()):
+                day_slot = "today"
             res = schedule.get_upcoming_classes_speech(student_id, target_day=day_slot)
             return build_alexa_response(
                 res["speech"],
@@ -162,7 +167,8 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 extract_slot_value(intent, "Subject") or
                 extract_slot_value(intent, "Course")
             )
-            res = schedule.get_class_room_and_time_speech(student_id, subject=subject)
+            is_past = "was" in intent_name.lower() or "past" in intent_name.lower()
+            res = schedule.get_class_room_and_time_speech(student_id, subject=subject, is_past_query=is_past)
             return build_alexa_response(
                 res["speech"],
                 card_title=res["card_title"],
@@ -262,29 +268,47 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
 
         # Add New Class Schedule Session
         elif intent_name in ("AddClassIntent", "CreateClassIntent", "NewClassIntent", "ScheduleClassIntent"):
-            subject = (
+            raw_sub = (
                 extract_slot_value(intent, "Subject") or
                 extract_slot_value(intent, "Course") or
                 extract_slot_value(intent, "SubjectName") or
-                "General"
+                ""
             )
-            room = (
+            raw_room = (
                 extract_slot_value(intent, "Room") or
                 extract_slot_value(intent, "RoomNumber") or
                 extract_slot_value(intent, "RoomNo") or
-                "Room 101"
+                ""
             )
-            time_val = (
+            raw_time = (
                 extract_slot_value(intent, "Time") or
                 extract_slot_value(intent, "StartTime") or
                 extract_slot_value(intent, "ClassTime") or
-                "10:00"
+                ""
             )
-            day_val = (
+            raw_day = (
                 extract_slot_value(intent, "Day") or
                 extract_slot_value(intent, "DayOfWeek") or
                 None
             )
+
+            # Defensive separation in case Alexa grouped room, time, or day into subject
+            if raw_sub and (" room " in raw_sub.lower() or " at " in raw_sub.lower() or " on " in raw_sub.lower()):
+                time_m = re.search(r'(?:at|time)\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm)?|\d{1,2}:\d{2})', raw_sub, re.I)
+                if time_m and not raw_time:
+                    raw_time = time_m.group(1)
+                room_m = re.search(r'(?:room\s*(?:no\.?|number)?|in\s+room)\s*([a-zA-Z0-9\-]+)', raw_sub, re.I)
+                if room_m and not raw_room:
+                    raw_room = room_m.group(1)
+                day_m = re.search(r'\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|today|tomorrow)\b', raw_sub, re.I)
+                if day_m and not raw_day:
+                    raw_day = day_m.group(1)
+                raw_sub = re.sub(r'\b(?:room\s*(?:no\.?|number)?\s*[a-zA-Z0-9\-]+|at\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)?|on\s+[a-zA-Z]+).*', '', raw_sub, flags=re.I).strip()
+
+            subject = raw_sub.strip() if raw_sub.strip() else "General"
+            room = raw_room.strip() if raw_room.strip() else "Room 101"
+            time_val = raw_time.strip() if raw_time.strip() else "10:00"
+            day_val = raw_day
             
             cls_info = schedule.add_class_session(
                 student_id=student_id,
@@ -311,6 +335,16 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 card_content=card_text,
                 should_end_session=True
             )
+
+        # Campus Command Intent (Bridge natural language voice commands directly to parser)
+        elif intent_name in ("CampusCommandIntent", "NaturalVoiceIntent", "UserCommandIntent"):
+            cmd = (
+                extract_slot_value(intent, "Command") or
+                extract_slot_value(intent, "Utterance") or
+                extract_slot_value(intent, "Query")
+            )
+            if cmd:
+                return parse_natural_language_to_alexa(student_id, cmd)
             
         # Greeting Intent (e.g. "hii", "hi")
         elif intent_name in ("GreetingIntent", "HelloIntent", "HiIntent"):
@@ -343,6 +377,14 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
             return build_alexa_response(speech, card_title="Campus Companion", reprompt_text="What would you like to do?", should_end_session=False)
 
         elif intent_name == "AMAZON.FallbackIntent":
+            # Check if any slot was passed with raw utterance or text
+            slots = intent.get("slots", {})
+            for s_name in slots:
+                val = extract_slot_value(intent, s_name)
+                if val and len(str(val).strip()) > 2:
+                    parsed = parse_natural_language_to_alexa(student_id, str(val))
+                    if parsed and "I didn't quite catch that" not in parsed.get("response", {}).get("outputSpeech", {}).get("text", ""):
+                        return parsed
             speech = (
                 f"I didn't quite catch that {student_name}. You can ask 'What is my next class?', "
                 "'Do I have any pending assessments?', or say 'I have to submit DBMS assignment within 5 days'. "

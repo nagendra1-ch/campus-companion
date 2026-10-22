@@ -54,7 +54,8 @@ def alexa_webhook():
     req_data = request.get_json(force=True, silent=True) or {}
     explicit_student_id = request.args.get("studentId", None, type=int)
     
-    print(f"\n[ALEXA REQUEST] Type: {req_data.get('request', {}).get('type')}, Intent: {req_data.get('request', {}).get('intent', {}).get('name')}", flush=True)
+    intent_obj = req_data.get('request', {}).get('intent', {})
+    print(f"\n[ALEXA REQUEST] Type: {req_data.get('request', {}).get('type')}, Intent: {intent_obj.get('name')}, Slots: {intent_obj.get('slots')}", flush=True)
     try:
         response = alexa_handler.handle_alexa_request(req_data, explicit_student_id=explicit_student_id)
         print(f"[ALEXA RESPONSE] Spoken: \"{response.get('response', {}).get('outputSpeech', {}).get('text')}\"\n", flush=True)
