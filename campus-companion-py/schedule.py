@@ -449,15 +449,24 @@ def parse_time_input(time_str: str) -> str:
     if s in ("ni", "night"):
         return "19:00"
         
+    # Word numbers map for spoken times like "two p.m."
+    word_hours = {
+        "one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "six": "6",
+        "seven": "7", "eight": "8", "nine": "9", "ten": "10", "eleven": "11", "twelve": "12"
+    }
+    s_norm = s.replace(".", "").strip()
+    for w, num_s in word_hours.items():
+        s_norm = re.sub(r'\b' + w + r'\b', num_s, s_norm)
+
     # Match standard time e.g. "14:00", "09:30"
-    iso_match = re.match(r'^(\d{1,2}):(\d{2})$', s)
+    iso_match = re.match(r'^(\d{1,2}):(\d{2})$', s_norm)
     if iso_match:
         h = int(iso_match.group(1))
         m = int(iso_match.group(2))
         return f"{h:02d}:{m:02d}"
 
     # Match 12-hour or natural format e.g. "2 pm", "2:30 pm", "10 am", "11:15", "10"
-    m = re.search(r'(\d{1,2})(?::(\d{2}))?\s*(am|pm)?', s)
+    m = re.search(r'(\d{1,2})(?::(\d{2}))?\s*(am|pm)?', s_norm)
     if m:
         h = int(m.group(1))
         min_val = int(m.group(2)) if m.group(2) else 0
@@ -487,16 +496,39 @@ def compute_end_time(start_hhmm: str, duration_minutes: int = 60) -> str:
 
 
 def clean_room_number(room_str: str) -> str:
-    """Standardizes room number representations."""
+    """Standardizes room number representations including spoken numbers like 'c. one oh two'."""
     if not room_str:
         return "Room 101"
     r = str(room_str).strip()
     r = re.sub(r'^(?:with\s+)?(?:in\s+)?(?:at\s+)?(?:room\s+(?:no\.?|number)?|no\.?)\s*', '', r, flags=re.I).strip()
     if not r:
         return "Room 101"
-    if len(r) <= 2 or r.isdigit():
-        return f"Room {r.upper()}"
-    return r.upper() if len(r) <= 6 else r.title()
+        
+    # Normalize spoken digit words e.g. "c. one oh two", "b two oh four"
+    word_to_num = {
+        "zero": "0", "oh": "0", "o": "0", "one": "1", "two": "2", "three": "3",
+        "four": "4", "five": "5", "six": "6", "seven": "7", "eight": "8", "nine": "9"
+    }
+    r_clean = r.replace(".", " ").replace("-", " ").lower()
+    tokens = r_clean.split()
+    converted_tokens = [word_to_num.get(t, t) for t in tokens]
+    
+    # Letter + digits e.g. ['c', '1', '0', '2'] -> "C-102"
+    if len(converted_tokens) >= 2 and len(converted_tokens[0]) == 1 and converted_tokens[0].isalpha() and all(t.isdigit() for t in converted_tokens[1:]):
+        digits = "".join(converted_tokens[1:])
+        return f"{converted_tokens[0].upper()}-{digits}"
+        
+    # Just digits e.g. ['1', '0', '2'] -> "Room 102"
+    if converted_tokens and all(t.isdigit() for t in converted_tokens):
+        return f"Room {''.join(converted_tokens)}"
+        
+    joined = "".join(converted_tokens).upper()
+    if re.match(r'^[A-Z]\d{2,4}$', joined):
+        return f"{joined[0]}-{joined[1:]}"
+    r_no_dot = r.strip('. \t\n')
+    if len(r_no_dot) <= 2 or r_no_dot.isdigit():
+        return f"Room {r_no_dot.upper()}"
+    return r_no_dot.upper() if len(r_no_dot) <= 6 else r_no_dot.title()
 
 
 def add_class_session(

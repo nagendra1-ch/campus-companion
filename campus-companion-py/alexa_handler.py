@@ -138,7 +138,8 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 res["speech"],
                 card_title=res["card_title"],
                 card_content=res["card_content"],
-                should_end_session=True
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
             )
 
         # Upcoming Classes / Timetable Schedule Query (Plural / List)
@@ -158,7 +159,8 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 res["speech"],
                 card_title=res["card_title"],
                 card_content=res["card_content"],
-                should_end_session=True
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
             )
             
         # Class Room / Class Time / Class Details Query
@@ -173,7 +175,8 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 res["speech"],
                 card_title=res["card_title"],
                 card_content=res["card_content"],
-                should_end_session=True
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
             )
 
         # Add Assignment & Set Daily Reminders
@@ -206,7 +209,8 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 speech,
                 card_title=f"Assignment Added: {task_info['subject']}",
                 card_content=card_text,
-                should_end_session=True
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
             )
             
         # Complete Assignment & Dismiss Reminders
@@ -226,13 +230,14 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                     speech,
                     card_title=f"Assignment {action_word.title()}",
                     card_content=f"{res['title']} has been marked {action_word}.",
-                    should_end_session=True
+                    reprompt_text="What else can I help you with?",
+                    should_end_session=False
                 )
             else:
                 action_action = "delete" if is_delete else "complete"
                 sub_text = f" for {subject}" if subject else ""
                 speech = f"I couldn't find any pending assignment{sub_text} to {action_action}."
-                return build_alexa_response(speech, should_end_session=True)
+                return build_alexa_response(speech, reprompt_text="What else can I help you with?", should_end_session=False)
                 
         # Query Reminders, Active Tasks & Pending Assessments
         elif intent_name in (
@@ -246,7 +251,7 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
             
             if not active_tasks and not active_reminders:
                 speech = f"You're all caught up {student_name}! You have no pending assessments, assignments, or reminders."
-                return build_alexa_response(speech, card_title="Reminders & Assessments", card_content=speech, should_end_session=True)
+                return build_alexa_response(speech, card_title="Reminders & Assessments", card_content=speech, reprompt_text="What else can I help you with?", should_end_session=False)
                 
             task_descriptions = []
             for t in active_tasks:
@@ -264,7 +269,13 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 speech += f" You also have {len(active_reminders)} active daily reminder notification{'s' if len(active_reminders) != 1 else ''} today."
                 
             card_content = "\n".join([f"• {t['title']} - {t['due_formatted']}" for t in active_tasks])
-            return build_alexa_response(speech, card_title="Pending Assessments & Reminders", card_content=card_content, should_end_session=True)
+            return build_alexa_response(
+                speech,
+                card_title="Pending Assessments & Reminders",
+                card_content=card_content,
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
+            )
 
         # Add New Class Schedule Session
         elif intent_name in ("AddClassIntent", "CreateClassIntent", "NewClassIntent", "ScheduleClassIntent"):
@@ -333,7 +344,27 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 speech,
                 card_title=f"Class Scheduled: {cls_info['subject']}",
                 card_content=card_text,
-                should_end_session=True
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
+            )
+
+        # Study Plan / AI Academic Advice Intent
+        elif intent_name in ("StudyPlanIntent", "DailyStudyPlanIntent", "AcademicAdviceIntent"):
+            import ai_assistant
+            advice_dict = ai_assistant.generate_smart_study_advice(student_id)
+            if advice_dict and "advice" in advice_dict:
+                clean_speech = re.sub(r'[\*\#\_]', '', advice_dict["advice"])
+                clean_speech = re.sub(r'[^\x00-\x7F]+', ' ', clean_speech)
+                sentences = [s.strip() for s in clean_speech.split("\n") if s.strip()]
+                speech = f"Here is your study plan for today {student_name}: " + " ".join(sentences[:3])
+            else:
+                speech = f"Here is your study plan {student_name}: prioritize your upcoming assignments and review your notes after class."
+            return build_alexa_response(
+                speech,
+                card_title="Daily Study Plan",
+                card_content=advice_dict.get("advice", speech) if advice_dict else speech,
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
             )
 
         # Campus Command Intent (Bridge natural language voice commands directly to parser)
@@ -352,7 +383,8 @@ def handle_alexa_request(req_json: dict, explicit_student_id: int | None = None)
                 f"Hi {student_name}",
                 card_title="Campus Companion",
                 card_content=f"Hi {student_name}",
-                should_end_session=True
+                reprompt_text="What else can I help you with?",
+                should_end_session=False
             )
 
         # Built-in Help, Stop, Cancel, NavigateHome, Fallback

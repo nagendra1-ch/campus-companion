@@ -80,12 +80,7 @@
           "slots": [
             {
               "name": "Day",
-              "type": "AMAZON.DayOfWeek",
-              "samples": [
-                "for {Day}",
-                "on {Day}",
-                "{Day}"
-              ]
+              "type": "AMAZON.DayOfWeek"
             }
           ],
           "samples": [
@@ -95,11 +90,34 @@
             "what classes are scheduled for me",
             "what classes do i have tomorrow",
             "what classes do i have on {Day}",
+            "upcoming classes scheduled for me",
             "upcoming classes",
             "classes scheduled for me",
             "what is my schedule tomorrow",
             "schedule for tomorrow",
-            "classes for {Day}"
+            "classes for {Day}",
+            "classes on {Day}"
+          ]
+        },
+        {
+          "name": "StudyPlanIntent",
+          "slots": [],
+          "samples": [
+            "give me a daily study plan",
+            "give me a study plan",
+            "give me my study plan",
+            "give me study advice",
+            "give me academic advice",
+            "daily study plan",
+            "study plan",
+            "study advice",
+            "academic advice",
+            "what should i study today",
+            "what to study today",
+            "how should i study today",
+            "how to study today",
+            "my study plan",
+            "study plan for today"
           ]
         },
         {
@@ -107,13 +125,7 @@
           "slots": [
             {
               "name": "Subject",
-              "type": "AMAZON.SearchQuery",
-              "samples": [
-                "of {Subject}",
-                "for {Subject}",
-                "{Subject} class",
-                "{Subject}"
-              ]
+              "type": "SUBJECT_TYPE"
             }
           ],
           "samples": [
@@ -161,49 +173,26 @@
           "slots": [
             {
               "name": "Subject",
-              "type": "AMAZON.SearchQuery",
-              "samples": [
-                "of {Subject}",
-                "for {Subject}",
-                "{Subject} class",
-                "{Subject}"
-              ]
+              "type": "SUBJECT_TYPE"
             },
             {
               "name": "Room",
-              "type": "ROOM_TYPE",
-              "samples": [
-                "room {Room}",
-                "room no {Room}",
-                "with room no {Room}",
-                "with room {Room}",
-                "in room {Room}",
-                "{Room}"
-              ]
+              "type": "ROOM_TYPE"
             },
             {
               "name": "Time",
-              "type": "AMAZON.TIME",
-              "samples": [
-                "and time {Time}",
-                "at time {Time}",
-                "at {Time}",
-                "time {Time}",
-                "{Time}"
-              ]
+              "type": "AMAZON.TIME"
             },
             {
               "name": "Day",
-              "type": "AMAZON.DayOfWeek",
-              "samples": [
-                "on {Day}",
-                "{Day}"
-              ]
+              "type": "AMAZON.DayOfWeek"
             }
           ],
           "samples": [
             "new class {Subject} room {Room} at {Time}",
-            "new class {Subject} room {Room} time {Time}",
+            "new class {Subject} room {Room} at {Time} p.m.",
+            "new class {Subject} room {Room} at {Time} a.m.",
+            "new class {Subject} room {Room} {Time}",
             "new class {Subject} in room {Room} at {Time}",
             "new class {Subject} in room {Room} time {Time}",
             "new class {Subject} room {Room}",
@@ -214,6 +203,24 @@
             "new class of {Subject} room {Room} at {Time}",
             "new class of {Subject} in room {Room} at {Time}",
             "new class of {Subject} room {Room} time {Time}",
+            "tomorrow {Subject} in room {Room} at {Time}",
+            "tomorrow {Subject} in room {Room} at {Time} a.m.",
+            "tomorrow {Subject} in room {Room} at {Time} p.m.",
+            "tomorrow {Subject} room {Room} at {Time}",
+            "tomorrow {Subject} room {Room} at {Time} a.m.",
+            "tomorrow {Subject} room {Room} at {Time} p.m.",
+            "tomorrow {Subject} in room {Room}",
+            "tomorrow {Subject} room {Room}",
+            "tomorrow class {Subject} in room {Room} at {Time}",
+            "tomorrow new class {Subject} in room {Room} at {Time}",
+            "tomorrow i have class of {Subject} in room {Room} at {Time}",
+            "tomorrow i have a class of {Subject} in room {Room} at {Time}",
+            "tomorrow i have a class {Subject} in room {Room} at {Time}",
+            "tomorrow i have class {Subject} in room {Room} at {Time}",
+            "{Day} {Subject} in room {Room} at {Time}",
+            "{Day} {Subject} room {Room} at {Time}",
+            "{Day} class {Subject} in room {Room} at {Time}",
+            "{Day} new class {Subject} in room {Room} at {Time}",
             "add class {Subject} room {Room} at {Time}",
             "add class {Subject} in room {Room} at {Time}",
             "add class {Subject} at {Time} in room {Room}",
@@ -257,33 +264,23 @@
           "slots": [
             {
               "name": "Subject",
-              "type": "AMAZON.SearchQuery",
-              "samples": [
-                "for {Subject}",
-                "{Subject} assignment",
-                "{Subject} assessment",
-                "{Subject}"
-              ]
+              "type": "SUBJECT_TYPE"
             },
             {
               "name": "Days",
-              "type": "AMAZON.NUMBER",
-              "samples": [
-                "within {Days} days",
-                "in {Days} days",
-                "{Days} days",
-                "{Days}"
-              ]
+              "type": "AMAZON.NUMBER"
             }
           ],
           "samples": [
-            "i have to submit {Subject} assignment within {Days} days",
-            "i have to submit {Subject} assignment in {Days} days",
-            "i have a {Subject} assignment due in {Days} days",
-            "submit {Subject} assignment within {Days} days",
             "submit {Subject} assignment in {Days} days",
+            "submit {Subject} assignment within {Days} days",
             "submit {Subject} in {Days} days",
             "submit {Subject} within {Days} days",
+            "i have to submit {Subject} assignment within {Days} days",
+            "i have to submit {Subject} assignment in {Days} days",
+            "i have to submit {Subject} in {Days} days",
+            "i have to submit {Subject} within {Days} days",
+            "i have a {Subject} assignment due in {Days} days",
             "add {Subject} assignment due in {Days} days",
             "remind me to submit {Subject} assignment in {Days} days",
             "set a deadline for {Subject} in {Days} days",
@@ -304,12 +301,7 @@
           "slots": [
             {
               "name": "Subject",
-              "type": "AMAZON.SearchQuery",
-              "samples": [
-                "{Subject} assignment",
-                "{Subject} assessment",
-                "{Subject}"
-              ]
+              "type": "SUBJECT_TYPE"
             }
           ],
           "samples": [
@@ -338,12 +330,7 @@
           "slots": [
             {
               "name": "Subject",
-              "type": "AMAZON.SearchQuery",
-              "samples": [
-                "{Subject} assignment",
-                "{Subject} assessment",
-                "{Subject}"
-              ]
+              "type": "SUBJECT_TYPE"
             }
           ],
           "samples": [
@@ -431,66 +418,223 @@
       ],
       "types": [
         {
+          "name": "SUBJECT_TYPE",
+          "values": [
+            {
+              "name": {
+                "value": "Cloud Computing",
+                "synonyms": ["cloud", "cloud computing class", "cloud computing lecture"]
+              }
+            },
+            {
+              "name": {
+                "value": "DBMS",
+                "synonyms": [
+                  "d. b. m. s.",
+                  "d b m s",
+                  "dbms",
+                  "database",
+                  "database management",
+                  "database management systems",
+                  "dbms class",
+                  "dbms lecture"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Operating Systems",
+                "synonyms": ["os", "operating system", "operating systems class", "os class", "operating systems lecture"]
+              }
+            },
+            {
+              "name": {
+                "value": "Software Engineering",
+                "synonyms": [
+                  "software eng",
+                  "software engineering",
+                  "se",
+                  "software engineering class",
+                  "software eng class",
+                  "software eng lecture"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Artificial Intelligence",
+                "synonyms": ["ai", "artificial intelligence class", "ai class"]
+              }
+            },
+            {
+              "name": {
+                "value": "Computer Networks",
+                "synonyms": ["cn", "networks", "networking", "computer networks class"]
+              }
+            },
+            {
+              "name": {
+                "value": "Machine Learning",
+                "synonyms": ["ml", "machine learning class"]
+              }
+            },
+            {
+              "name": {
+                "value": "Data Structures",
+                "synonyms": ["ds", "dsa", "data structures and algorithms"]
+              }
+            },
+            {
+              "name": {
+                "value": "Mathematics",
+                "synonyms": ["math", "maths", "math class"]
+              }
+            },
+            {
+              "name": {
+                "value": "Physics",
+                "synonyms": ["physics class"]
+              }
+            }
+          ]
+        },
+        {
           "name": "ROOM_TYPE",
           "values": [
             {
               "name": {
                 "value": "C-102",
-                "synonyms": ["c 102", "c-102", "room c 102", "room c-102", "c one zero two", "room c one zero two"]
+                "synonyms": [
+                  "c. one oh two",
+                  "c one oh two",
+                  "c one zero two",
+                  "c. 102",
+                  "c 102",
+                  "c-102",
+                  "see one oh two",
+                  "sea one oh two",
+                  "room c. one oh two",
+                  "room c one oh two",
+                  "room c 102",
+                  "room c-102"
+                ]
               }
             },
             {
               "name": {
                 "value": "B-204",
-                "synonyms": ["b 204", "b-204", "room b 204", "room b-204", "b two zero four", "room b two zero four"]
+                "synonyms": [
+                  "b. two oh four",
+                  "b two oh four",
+                  "b two zero four",
+                  "b. 204",
+                  "b 204",
+                  "b-204",
+                  "room b 204",
+                  "room b-204",
+                  "room b two oh four"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Room B",
+                "synonyms": ["room b", "room b.", "b", "b.", "b room", "class b", "classroom b"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room A",
+                "synonyms": ["room a", "room a.", "a", "a.", "a room", "class a", "classroom a"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room C",
+                "synonyms": ["room c", "room c.", "c", "c.", "c room", "class c", "classroom c"]
               }
             },
             {
               "name": {
                 "value": "A-101",
-                "synonyms": ["a 101", "a-101", "room a 101", "room a-101", "a one zero one"]
+                "synonyms": [
+                  "a. one oh one",
+                  "a one oh one",
+                  "a one zero one",
+                  "a. 101",
+                  "a 101",
+                  "a-101",
+                  "room a 101",
+                  "room a-101"
+                ]
               }
             },
             {
               "name": {
                 "value": "C-101",
-                "synonyms": ["c 101", "c-101", "room c 101", "room c-101"]
+                "synonyms": [
+                  "c. one oh one",
+                  "c one oh one",
+                  "c 101",
+                  "c-101",
+                  "room c 101",
+                  "room c-101"
+                ]
               }
             },
             {
               "name": {
                 "value": "B-201",
-                "synonyms": ["b 201", "b-201", "room b 201", "room b-201"]
+                "synonyms": [
+                  "b. two oh one",
+                  "b two oh one",
+                  "b 201",
+                  "b-201",
+                  "room b 201",
+                  "room b-201"
+                ]
               }
             },
             {
               "name": {
                 "value": "Room 101",
-                "synonyms": ["101", "room one zero one", "one zero one"]
+                "synonyms": ["101", "one oh one", "room one oh one", "room one zero one"]
               }
             },
             {
               "name": {
                 "value": "Room 102",
-                "synonyms": ["102", "room one zero two", "one zero two"]
+                "synonyms": ["102", "one oh two", "room one oh two", "room one zero two"]
               }
             },
             {
               "name": {
                 "value": "Room 201",
-                "synonyms": ["201", "room two zero one", "two zero one"]
+                "synonyms": ["201", "two oh one", "room two oh one", "room two zero one"]
               }
             },
             {
               "name": {
                 "value": "Room 202",
-                "synonyms": ["202", "room two zero two", "two zero two"]
+                "synonyms": ["202", "two oh two", "room two oh two", "room two zero two"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room 204",
+                "synonyms": ["204", "two oh four", "room two oh four"]
               }
             },
             {
               "name": {
                 "value": "Room 301",
-                "synonyms": ["301", "room three zero one", "three zero one"]
+                "synonyms": ["301", "three oh one", "room three oh one", "room three zero one"]
+              }
+            },
+            {
+              "name": {
+                "value": "Room 302",
+                "synonyms": ["302", "three oh two", "room three oh two"]
               }
             },
             {
